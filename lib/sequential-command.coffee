@@ -15,8 +15,9 @@ module.exports = SequentialCommand =
         {
           name: 'seq:home'
           commands: [
-            'editor:move-to-first-character-of-line', 'core:move-to-top',
-            'seq:return'
+            'editor:move-to-first-character-of-line',
+            'editor:move-to-beginning-of-line',
+            'core:move-to-top', 'seq:return'
           ]
         }
       ]
