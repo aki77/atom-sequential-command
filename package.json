@@ -1,6 +1,6 @@
 {
   "name": "sequential-command",
-  "main": "./lib/sequential-command",
+  "main": "./lib/main",
   "version": "0.0.0",
   "description": "A short description of your package",
   "repository": "https://github.com/aki77/atom-sequential-command",
@@ -9,5 +9,6 @@
     "atom": ">=0.174.0 <2.0.0"
   },
   "dependencies": {
+    "underscore-plus": "1.x"
   }
 }
