@@ -7,8 +7,9 @@
 
 # For more detailed documentation see
 # https://atom.io/docs/latest/behind-atom-keymaps-in-depth
-'atom-text-editor':
-  'ctrl-e': 'seq:end'
-  'ctrl-a': 'seq:home'
-  'alt-u': 'seq:upcase-backward-word'
-  'alt-l': 'seq:lower-backward-word'
+
+# 'atom-text-editor':
+#   'ctrl-e': 'seq:end'
+#   'ctrl-a': 'seq:home'
+#   'alt-u': 'seq:upcase-backward-word'
+#   'alt-l': 'seq:lower-backward-word'

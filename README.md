@@ -1,5 +1,48 @@
-# my-package package
+# sequential-command package
 
-A short description of your package.
+Many commands into one command
 
-![A screenshot of your package](https://f.cloud.github.com/assets/69169/2290250/c35d867a-a017-11e3-86be-cd7c5bf3ff9b.gif)
+![A screenshot of your package](http://i.gyazo.com/58329aae666e84ffc8bd08b7ceb8c6ef.gif)
+
+Inspired by [sequential-command.el](http://emacswiki.org/emacs/sequential-command.el).
+
+## Keymap
+
+No keymap by default.
+
+edit `~/.atom/keymap.cson`
+
+```coffeescript
+'atom-text-editor':
+  'ctrl-e': 'seq:end'
+  'ctrl-a': 'seq:home'
+  'alt-u': 'seq:upcase-backward-word'
+  'alt-l': 'seq:lower-backward-word'
+```
+
+## Settings
+
+edit `~/.atom/config.cson`
+
+```coffeescript
+  "sequential-command":
+    "commands": [
+      {
+        "name": "seq:end",
+        "commands": [
+          "editor:move-to-end-of-screen-line",
+          "core:move-to-bottom",
+          "seq:return"
+        ]
+      },
+      {
+        "name": "seq:home",
+        "commands": [
+          "editor:move-to-first-character-of-line",
+          "editor:move-to-beginning-of-line",
+          "core:move-to-top",
+          "seq:return"
+        ]
+      }
+    ]
+```
