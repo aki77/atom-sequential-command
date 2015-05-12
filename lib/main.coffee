@@ -41,8 +41,10 @@ module.exports =
       'seq:upcase-backward-word': @sequentialCommand.upcaseBackwardWord
       'seq:lower-backward-word': @sequentialCommand.lowerBackwardWord
 
-    for {name, commands} in atom.config.get('sequential-command.commands')
-      @sequentialCommand.addCommand(name, commands)
+    @disposables.add atom.config.observe 'sequential-command.commands', (seqCommands) =>
+      @sequentialCommand.resetCommands()
+      seqCommands.forEach ({name, commands}) =>
+        @sequentialCommand.addCommand(name, commands)
 
   deactivate: ->
     @sequentialCommand.destroy()

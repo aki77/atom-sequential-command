@@ -10,13 +10,13 @@ class SequentialCommand
   originalDispatchCommandEvent: null
 
   constructor: ->
-    @disposables = new CompositeDisposable()
-
+    @subscriptions = new CompositeDisposable()
     @originalDispatchCommandEvent = atom.keymaps.dispatchCommandEvent
     _.adviseBefore(atom.keymaps, 'dispatchCommandEvent', @dispatchCommandEvent)
 
   destroy: ->
-    @disposables.dispose()
+    @resetCommands()
+    @subscriptions.dispose()
     @lastCommand = @thisCommand = null
     atom.keymaps.dispatchCommandEvent = @originalDispatchCommandEvent
 
@@ -52,8 +52,13 @@ class SequentialCommand
       @storeCount = 0
 
   addCommand: (name, commands) =>
-    @disposables.add atom.commands.add 'atom-text-editor', name, (event) =>
+    @commandSubscriptions ?= new CompositeDisposable()
+    @commandSubscriptions.add atom.commands.add 'atom-text-editor', name, (event) =>
       command = commands[@count() % commands.length]
       editor = atom.workspace.getActiveTextEditor()
       editorView = atom.views.getView editor
       atom.commands.dispatch editorView, command
+
+  resetCommands: =>
+    @commandSubscriptions?.dispose()
+    @commandSubscriptions = null
