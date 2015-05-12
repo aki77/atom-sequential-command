@@ -1,7 +1,7 @@
 {
   "name": "sequential-command",
   "main": "./lib/main",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A short description of your package",
   "repository": "https://github.com/aki77/atom-sequential-command",
   "license": "MIT",
