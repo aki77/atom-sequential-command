@@ -2,7 +2,7 @@
   "name": "sequential-command",
   "main": "./lib/main",
   "version": "0.1.0",
-  "description": "A short description of your package",
+  "description": "Many commands into one command",
   "repository": "https://github.com/aki77/atom-sequential-command",
   "license": "MIT",
   "engines": {
