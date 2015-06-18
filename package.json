@@ -10,5 +10,13 @@
   },
   "dependencies": {
     "underscore-plus": "1.x"
+  },
+  "providedServices": {
+    "sequential-command": {
+      "description": "",
+      "versions": {
+        "0.2.0": "provide"
+      }
+    }
   }
 }

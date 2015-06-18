@@ -42,10 +42,18 @@ module.exports =
       'seq:lower-backward-word': @sequentialCommand.lowerBackwardWord
 
     @disposables.add atom.config.observe 'sequential-command.commands', (seqCommands) =>
-      @sequentialCommand.resetCommands()
+      @customCommandsSubscriptions?.dispose()
+      @customCommandsSubscriptions = new CompositeDisposable
+
       for {name, commands} in seqCommands
-        @sequentialCommand.addCommand(name, commands)
+        @customCommandsSubscriptions.add(@sequentialCommand.addCommand(name, commands))
 
   deactivate: ->
     @sequentialCommand.destroy()
     @disposables.dispose()
+    @customCommandsSubscriptions?.dispose()
+    @customCommandsSubscriptions = null
+
+  provide: ->
+    replaceBackwardWord: @sequentialCommand.replaceBackwardWord.bind(@sequentialCommand)
+    addCommand: @sequentialCommand.addCommand.bind(@sequentialCommand)

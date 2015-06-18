@@ -1,5 +1,4 @@
 _ = require 'underscore-plus'
-{CompositeDisposable} = require 'atom'
 
 module.exports =
 class SequentialCommand
@@ -18,7 +17,6 @@ class SequentialCommand
     _.adviseBefore(atom.keymaps, 'dispatchCommandEvent', @dispatchCommandEvent)
 
   destroy: ->
-    @resetCommands()
     @lastCommand = @thisCommand = null
     atom.keymaps.dispatchCommandEvent = @originalDispatchCommandEvent
 
@@ -56,14 +54,14 @@ class SequentialCommand
       @startPosition = editor?.getCursorBufferPosition()
       @storeCount = 0
 
-  addCommand: (name, commands) =>
-    @commandSubscriptions ?= new CompositeDisposable
-    @commandSubscriptions.add atom.commands.add 'atom-text-editor', name, (event) =>
-      command = commands[@count() % commands.length]
+  addCommand: (name, commands, {undo} = {}) =>
+    atom.commands.add 'atom-text-editor', name, (event) =>
+      count = @count()
+      command = commands[count % commands.length]
       editor = @getActiveTextEditor()
+
+      undo ?= false
+      editor.undo() if undo and count > 0
+
       editorView = atom.views.getView(editor)
       atom.commands.dispatch(editorView, command)
-
-  resetCommands: =>
-    @commandSubscriptions?.dispose()
-    @commandSubscriptions = null
