@@ -1,3 +1,6 @@
+## 0.2.0
+* Add spec
+
 ## 0.1.1
 * Fix the package description
 

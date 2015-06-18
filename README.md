@@ -25,6 +25,8 @@ edit `~/.atom/keymap.cson`
 edit `~/.atom/config.cson`
 
 ```coffeescript
+# default settings
+"*":
   "sequential-command":
     "commands": [
       {

@@ -33,8 +33,8 @@ module.exports =
               type: 'string'
 
   activate: (state) ->
-    @disposables = new CompositeDisposable()
-    @sequentialCommand = new SequentialCommand()
+    @disposables = new CompositeDisposable
+    @sequentialCommand = new SequentialCommand
 
     @disposables.add atom.commands.add 'atom-text-editor',
       'seq:return': @sequentialCommand.return
@@ -43,7 +43,7 @@ module.exports =
 
     @disposables.add atom.config.observe 'sequential-command.commands', (seqCommands) =>
       @sequentialCommand.resetCommands()
-      seqCommands.forEach ({name, commands}) =>
+      for {name, commands} in seqCommands
         @sequentialCommand.addCommand(name, commands)
 
   deactivate: ->

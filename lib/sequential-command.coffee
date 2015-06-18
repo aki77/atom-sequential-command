@@ -3,6 +3,10 @@ _ = require 'underscore-plus'
 
 module.exports =
 class SequentialCommand
+  ignoreCommands = new Set([
+    'editor:display-updated', 'cursor:moved', 'selection:changed'
+  ])
+
   lastCommand: null
   thisCommand: null
   startPosition: null
@@ -10,23 +14,24 @@ class SequentialCommand
   originalDispatchCommandEvent: null
 
   constructor: ->
-    @subscriptions = new CompositeDisposable()
     @originalDispatchCommandEvent = atom.keymaps.dispatchCommandEvent
     _.adviseBefore(atom.keymaps, 'dispatchCommandEvent', @dispatchCommandEvent)
 
   destroy: ->
     @resetCommands()
-    @subscriptions.dispose()
     @lastCommand = @thisCommand = null
     atom.keymaps.dispatchCommandEvent = @originalDispatchCommandEvent
 
-  dispatchCommandEvent: (command, target, keyboardEvent) =>
+  dispatchCommandEvent: (command) =>
     @lastCommand = @thisCommand
     @thisCommand = command
 
+  getActiveTextEditor: ->
+    atom.workspace.getActiveTextEditor()
+
   return: =>
-    editor = atom.workspace.getActiveTextEditor()
-    editor.setCursorBufferPosition @startPosition
+    editor = @getActiveTextEditor()
+    editor?.setCursorBufferPosition(@startPosition)
 
   upcaseBackwardWord: =>
     @replaceBackwardWord (editor) -> editor.upperCase()
@@ -35,7 +40,7 @@ class SequentialCommand
     @replaceBackwardWord (editor) -> editor.lowerCase()
 
   replaceBackwardWord: (fn) =>
-    editor = atom.workspace.getActiveTextEditor()
+    editor = @getActiveTextEditor()
     editor?.transact =>
       position = editor.getCursorBufferPosition()
       count = @count() + 1
@@ -47,17 +52,17 @@ class SequentialCommand
     if @lastCommand is @thisCommand
       @storeCount += 1
     else
-      editor = atom.workspace.getActiveTextEditor()
-      @startPosition = editor.getCursorBufferPosition()
+      editor = @getActiveTextEditor()
+      @startPosition = editor?.getCursorBufferPosition()
       @storeCount = 0
 
   addCommand: (name, commands) =>
-    @commandSubscriptions ?= new CompositeDisposable()
+    @commandSubscriptions ?= new CompositeDisposable
     @commandSubscriptions.add atom.commands.add 'atom-text-editor', name, (event) =>
       command = commands[@count() % commands.length]
-      editor = atom.workspace.getActiveTextEditor()
-      editorView = atom.views.getView editor
-      atom.commands.dispatch editorView, command
+      editor = @getActiveTextEditor()
+      editorView = atom.views.getView(editor)
+      atom.commands.dispatch(editorView, command)
 
   resetCommands: =>
     @commandSubscriptions?.dispose()
