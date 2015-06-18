@@ -1,6 +1,7 @@
 # sequential-command package
 
 Many commands into one command
+[![Build Status](https://travis-ci.org/aki77/atom-sequential-command.svg)](https://travis-ci.org/aki77/atom-sequential-command)
 
 ![A screenshot of your package](http://i.gyazo.com/58329aae666e84ffc8bd08b7ceb8c6ef.gif)
 
