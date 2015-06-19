@@ -57,3 +57,4 @@ module.exports =
   provide: ->
     replaceBackwardWord: @sequentialCommand.replaceBackwardWord.bind(@sequentialCommand)
     addCommand: @sequentialCommand.addCommand.bind(@sequentialCommand)
+    count: @sequentialCommand.count.bind(@sequentialCommand)

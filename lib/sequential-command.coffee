@@ -1,5 +1,3 @@
-_ = require 'underscore-plus'
-
 module.exports =
 class SequentialCommand
   ignoreCommands = new Set([
@@ -11,16 +9,19 @@ class SequentialCommand
   startPosition: null
   storeCount: 0
   originalDispatchCommandEvent: null
+  disableLogging = false
 
   constructor: ->
-    @originalDispatchCommandEvent = atom.keymaps.dispatchCommandEvent
-    _.adviseBefore(atom.keymaps, 'dispatchCommandEvent', @dispatchCommandEvent)
+    @commandDispatchSubscription = atom.commands.onWillDispatch(@logCommand)
 
   destroy: ->
+    @commandDispatchSubscription?.dispose()
     @lastCommand = @thisCommand = null
-    atom.keymaps.dispatchCommandEvent = @originalDispatchCommandEvent
 
-  dispatchCommandEvent: (command) =>
+  logCommand: ({type: command}) =>
+    return if @disableLogging
+    return if command.indexOf(':') is -1
+    return if ignoreCommands.has(command)
     @lastCommand = @thisCommand
     @thisCommand = command
 
@@ -64,4 +65,6 @@ class SequentialCommand
       editor.undo() if undo and count > 0
 
       editorView = atom.views.getView(editor)
+      @disableLogging = true
       atom.commands.dispatch(editorView, command)
+      @disableLogging = false

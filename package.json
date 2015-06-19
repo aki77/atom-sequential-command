@@ -9,13 +9,12 @@
     "atom": ">=0.174.0 <2.0.0"
   },
   "dependencies": {
-    "underscore-plus": "1.x"
   },
   "providedServices": {
     "sequential-command": {
       "description": "",
       "versions": {
-        "0.2.0": "provide"
+        "0.1.0": "provide"
       }
     }
   }
